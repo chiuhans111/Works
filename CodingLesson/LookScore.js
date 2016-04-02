@@ -10,13 +10,15 @@
   
        
 */
-function pRound(num, dig){
+var ls = {};
+
+ls.pRound = function(num, dig){
   for(var i=0;i<dig;i++) num*=10;
   num = Math.round(num);
   for(var i=0;i<dig;i++) num/=10;
   return num;
 }
-function genTrNodes(td, data){
+ls.genTrNodes = function(td, data){
   var node = document.createElement("tr");
   for(var i in data){
     var d = document.createElement(td);
@@ -25,8 +27,8 @@ function genTrNodes(td, data){
   }
   return node;
 }
-
-function gfForSortTable(table, rowId){
+ls.gfForSortTable = function(th, rowId){
+  var table = th.parentElement.parentElement.parentElement.getElementsByTagName("tbody")[0];
   return function(){
     var gettt = table.getElementsByTagName("tr");
     var tt = [];
@@ -39,46 +41,42 @@ function gfForSortTable(table, rowId){
     for(var i in tt) table.appendChild(tt[i]);
   }
 }
-var theTable = "";
-function genTable(title, data){
+ls.genTable = function(title, data, students){
   var node = document.createElement("table");
   node.setAttribute("class","table table-bordered table-hover");
   node.setAttribute("style","background:#ffffff");
   var h = document.createElement("thead");
   var b = document.createElement("tbody");
-  theTable = b;
-  h.appendChild(genTrNodes("th", title));
+  h.appendChild(ls.genTrNodes("th", title));
   for(var i in data){
-    var tr = genTrNodes("td", data[i]);
+    var tr = ls.genTrNodes("td", data[i]);
     tr.setAttribute("title", students[i].getTitles());
     b.appendChild(tr);
   }
   var ths = h.getElementsByTagName("th");
-  console.log(ths);
   for(var i in ths){
     var th = ths[i];
     if(th instanceof Node)
-    th.setAttribute("onclick","gfForSortTable(theTable, "+i+")()");
+    th.setAttribute("onclick","ls.gfForSortTable(this, "+i+")()");
   }
   node.appendChild(h);
   node.appendChild(b);
   return node;
 }
-
-function score(name, stats, score, title, time){
+ls.score = function(name, stats, score, title, time){
   this.name = name.trim();
   this.stats = stats;
   this.score = score;
   this.title = title.trim();
   this.time = time.trim();
 }
-function getSubString(string, cuts){
-  this.subPoints = [];
+ls.getSubString = function(string, cuts){
+  var subPoints = [];
   for(var i in cuts){
     var word = cuts[i];
     var leng = word.length;
     var pos = string.search(word);
-    this.subPoints.push({start:pos, end:pos+leng});
+    subPoints.push({start:pos, end:pos+leng});
   }
   var result = [];
   for(var i in subPoints){
@@ -97,21 +95,19 @@ function getSubString(string, cuts){
   }
   return result;
 }
-function getScoreByString(string){
-  if(string==null) return new score("", "noScore", 0, "", "");
+ls.getScoreByString = function(string){
+  if(string==null) return new ls.score("", "noScore", 0, "", "");
   var start = 0;
   //for(var i in string) if(string[i]==' ' && string[Number(i)+1]!=' '){start = Number(i)+1; break;}
   string = "thisname:"+string.substr(start);
-  var result = getSubString(string,["thisname:","得分：","評語：","時間："]);
+  var result = ls.getSubString(string,["thisname:","得分：","評語：","時間："]);
   if(result[1].stats==1){
-    return new score(result[0].text, "scored", Number(result[1].text),result[2].text,result[3].text);
+    return new ls.score(result[0].text, "scored", Number(result[1].text),result[2].text,result[3].text);
   }else{
-    return new score(result[0].text, "noScore", 0, "", "");
+    return new ls.score(result[0].text, "noScore", 0, "", "");
   }
 }
-
-var students = [];
-function student(name, number){
+ls.student = function(name, number){
   this.name = name.trim();
   this.number = number;
   this.scores = [];
@@ -143,7 +139,7 @@ function student(name, number){
   }
   
   this.toString = function(){
-    return this.number+"\t"+this.name+"\t"+this.sum+"\t"+pRound(this.ava,0)+"\t"+this.rank;
+    return this.number+"\t"+this.name+"\t"+this.sum+"\t"+ls.pRound(this.ava,0)+"\t"+this.rank;
   }
   
   this.getTitles = function(){
@@ -152,24 +148,24 @@ function student(name, number){
     return s;
   }
 }
-
-function getData(){
+ls.getData = function(){
+  var students = [];
   var table = document.getElementsByTagName("tbody")[1];
   var trs = table.getElementsByTagName("tr");
   for(var i in trs){
     var tr = trs[i];
     if(!(tr instanceof Node)) continue;
     var tds = tr.getElementsByTagName("td");
-    var s = new student(tds[1].textContent, Number(tds[0].textContent));
+    var s = new ls.student(tds[1].textContent, Number(tds[0].textContent));
     for(var j = 2; j<tds.length;j++){
-      s.scores.push(getScoreByString(tds[j].getAttribute("title")));
+      s.scores.push(ls.getScoreByString(tds[j].getAttribute("title")));
     }
     s.calcScore();
     students.push(s);
   }
+  return students;
 }
-
-function calcRank(){
+ls.calcRank = function(students){
   var rStudents = [];
   for(var i in students){
     rStudents.push({id:i, data:students[i]});
@@ -179,19 +175,17 @@ function calcRank(){
     students[rStudents[i].id].rank = Number(i)+1;
   }
 }
-
-function genStudentTable(students){
+ls.genStudentTable = function(students){
   var data = [];
   for(var i in students){
     var s = students[i];
-    data.push([s.number, s.name, s.rank, s.sum, pRound(s.ava,2)]);
+    data.push([s.number, s.name, s.rank, s.sum, ls.pRound(s.ava,2)]);
   }
-  return genTable(["座號","姓名","名次","總分","平均"], data);
+  return ls.genTable(["座號","姓名","名次","總分","平均"], data, students);
 }
-
-function dothework(){
-  getData();
-  calcRank();
+ls.dothework = function(){
+  var students = ls.getData();
+  ls.calcRank(students);
 
   var body = document.getElementsByTagName("body")[0];
 
@@ -206,9 +200,11 @@ function dothework(){
   contain.setAttribute("class","container");
   var div = document.createElement("div");
   div.setAttribute("class","col-md-12 panel-body");
-  var table = genStudentTable(students);
+  var table = ls.genStudentTable(students);
   div.appendChild(table);
-
+  
   contain.appendChild(div);
   body.appendChild(contain);
 }
+
+ls.dothework();
