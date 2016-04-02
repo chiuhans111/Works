@@ -1,1 +1,214 @@
-function pRound(t,e){for(var n=0;e>n;n++)t*=10;t=Math.round(t);for(var n=0;e>n;n++)t/=10;return t}function genTrNodes(t,e){var n=document.createElement("tr");for(var r in e){var s=document.createElement(t);s.textContent=e[r],n.appendChild(s)}return n}function gfForSortTable(t,e){return function(){var n=t.getElementsByTagName("tr"),r=[];for(var s in n)n[s]instanceof Node&&r.push(n[s]);r.sort(function(t,n){return Number(t.getElementsByTagName("td")[e].textContent)-Number(n.getElementsByTagName("td")[e].textContent)}),t.childNodes=[];for(var s in r)t.appendChild(r[s])}}function genTable(t,e){var n=document.createElement("table");n.setAttribute("class","table table-bordered table-hover"),n.setAttribute("style","background:#ffffff");var r=document.createElement("thead"),s=document.createElement("tbody");theTable=s,r.appendChild(genTrNodes("th",t));for(var a in e)s.appendChild(genTrNodes("td",e[a]));var o=r.getElementsByTagName("th");console.log(o);for(var a in o){var i=o[a];i instanceof Node&&i.setAttribute("onclick","gfForSortTable(theTable, "+a+")()")}return n.appendChild(r),n.appendChild(s),n}function score(t,e,n,r,s){this.name=t.trim(),this.stats=e,this.score=n,this.title=r.trim(),this.time=s.trim()}function getSubString(t,e){this.subPoints=[];for(var n in e){var r=e[n],s=r.length,a=t.search(r);this.subPoints.push({start:a,end:a+s})}var o=[];for(var n in subPoints){var i=subPoints[n].end,c=t.length;if(-1==subPoints[n].start)o.push({stats:0,text:""});else{for(var u in subPoints){var d=subPoints[u].start;d>i&&c>d&&(c=d)}o.push({stats:1,text:t.slice(i,c)})}}return o}function getScoreByString(t){if(null==t)return new score("","noScore",0,"","");var e=0;for(var n in t)if(" "==t[n]&&" "!=t[Number(n)+1]){e=Number(n)+1;break}t="thisname:"+t.substr(e);var r=getSubString(t,["thisname:","得分：","評語：","時間："]);return 1==r[1].stats?new score(r[0].text,"scored",Number(r[1].text),r[2].text,r[3].text):new score(r[0].text,"noScore",0,"","")}function student(t,e){this.name=t.trim(),this.number=e,this.scores=[],this.sum=0,this.ava=0,this.rank=0,this.titles=[],this.calcScore=function(){if(!(this.scores.length<=0)){var t=0,e=0;this.titles=[];for(var n in this.scores)if("scored"==this.scores[n].stats){t+=Number(this.scores[n].score),e++;var r=this.scores[n].title;"(無)"!=r&&this.titles.push({name:this.scores[n].name,text:r})}this.sum=t,0!=e?this.ava=t/e:this.ava=0}},this.toString=function(){return this.number+"	"+this.name+"	"+this.sum+"	"+pRound(this.ava,0)+"	"+this.rank}}function getData(){var t=document.getElementsByTagName("tbody")[1],e=t.getElementsByTagName("tr");for(var n in e){var r=e[n];if(r instanceof Node){for(var s=r.getElementsByTagName("td"),a=new student(s[1].textContent,Number(s[0].textContent)),o=2;o<s.length;o++)a.scores.push(getScoreByString(s[o].getAttribute("title")));a.calcScore(),students.push(a)}}}function calcRank(){var t=[];for(var e in students)t.push({id:e,data:students[e]});t.sort(function(t,e){return-t.data.ava+e.data.ava});for(var e in t)students[t[e].id].rank=Number(e)+1}function genStudentTable(t){var e=[];for(var n in t){var r=t[n];e.push([r.number,r.name,r.rank,r.sum,pRound(r.ava,2)])}return genTable(["座號","姓名","名次","總分","平均"],e)}var theTable="",students=[];getData(),calcRank();var body=document.getElementsByTagName("body")[0];body.innerHTML+="<script src='https://code.jquery.com/jquery-1.12.0.min.js'></script><script src='https://code.jquery.com/jquery-migrate-1.2.1.min.js'></script><link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' ><link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css'><script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>";var contain=document.createElement("div");contain.setAttribute("class","container");var div=document.createElement("div");div.setAttribute("class","col-md-12 panel-body"),div.appendChild(genStudentTable(students)),contain.appendChild(div),body.appendChild(contain);
+/*  臺北市立大安高工資訊科程式設計實習課程之作業展示成績統計工具
+  ┌──────────────────┐
+  │ created by Hans  │
+  │        2016/04/02│
+  └──────────────────┘
+       
+  ┌────────────────────────────────────────────┐
+  │請複製以下短碼於作業展示網頁以F12開啟Console並貼上
+  ├──────────────────────────────────────────┤
+  
+       
+*/
+function pRound(num, dig){
+  for(var i=0;i<dig;i++) num*=10;
+  num = Math.round(num);
+  for(var i=0;i<dig;i++) num/=10;
+  return num;
+}
+function genTrNodes(td, data){
+  var node = document.createElement("tr");
+  for(var i in data){
+    var d = document.createElement(td);
+    d.textContent = data[i];
+    node.appendChild(d);
+  }
+  return node;
+}
+
+function gfForSortTable(table, rowId){
+  return function(){
+    var gettt = table.getElementsByTagName("tr");
+    var tt = [];
+    for(var i in gettt) if(gettt[i] instanceof Node)tt.push(gettt[i]);
+    tt.sort(function(a,b){
+      return Number(a.getElementsByTagName("td")[rowId].textContent)
+        -Number(b.getElementsByTagName("td")[rowId].textContent);
+    });
+    table.childNodes = [];
+    for(var i in tt) table.appendChild(tt[i]);
+  }
+}
+var theTable = "";
+function genTable(title, data){
+  var node = document.createElement("table");
+  node.setAttribute("class","table table-bordered table-hover");
+  node.setAttribute("style","background:#ffffff");
+  var h = document.createElement("thead");
+  var b = document.createElement("tbody");
+  theTable = b;
+  h.appendChild(genTrNodes("th", title));
+  for(var i in data){
+    var tr = genTrNodes("td", data[i]);
+    tr.setAttribute("title", students[i].getTitles());
+    b.appendChild(tr);
+  }
+  var ths = h.getElementsByTagName("th");
+  console.log(ths);
+  for(var i in ths){
+    var th = ths[i];
+    if(th instanceof Node)
+    th.setAttribute("onclick","gfForSortTable(theTable, "+i+")()");
+  }
+  node.appendChild(h);
+  node.appendChild(b);
+  return node;
+}
+
+function score(name, stats, score, title, time){
+  this.name = name.trim();
+  this.stats = stats;
+  this.score = score;
+  this.title = title.trim();
+  this.time = time.trim();
+}
+function getSubString(string, cuts){
+  this.subPoints = [];
+  for(var i in cuts){
+    var word = cuts[i];
+    var leng = word.length;
+    var pos = string.search(word);
+    this.subPoints.push({start:pos, end:pos+leng});
+  }
+  var result = [];
+  for(var i in subPoints){
+    var start = subPoints[i].end;
+    var end = string.length;
+    if(subPoints[i].start == -1) {
+      result.push({stats: 0, text: ""});
+    }
+    else{
+      for(var j in subPoints){
+        var n = subPoints[j].start;
+        if(n>start && n<end)end = n;
+      }
+      result.push({stats: 1, text:string.slice(start, end)});
+    }
+  }
+  return result;
+}
+function getScoreByString(string){
+  if(string==null) return new score("", "noScore", 0, "", "");
+  var start = 0;
+  //for(var i in string) if(string[i]==' ' && string[Number(i)+1]!=' '){start = Number(i)+1; break;}
+  string = "thisname:"+string.substr(start);
+  var result = getSubString(string,["thisname:","得分：","評語：","時間："]);
+  if(result[1].stats==1){
+    return new score(result[0].text, "scored", Number(result[1].text),result[2].text,result[3].text);
+  }else{
+    return new score(result[0].text, "noScore", 0, "", "");
+  }
+}
+
+var students = [];
+function student(name, number){
+  this.name = name.trim();
+  this.number = number;
+  this.scores = [];
+  this.sum = 0;
+  this.ava = 0;
+  this.rank = 0;
+  this.titles = [];
+  this.calcScore = function(){
+    if(this.scores.length<=0) return;
+    var sum = 0;
+    var count = 0;
+    this.titles = [];
+    for(var i in this.scores){
+      if(this.scores[i].stats=="scored"){
+        sum += Number(this.scores[i].score);
+        count++;
+        
+        var text = this.scores[i].title;
+        if(text!="(無)"){
+          this.titles.push({name:this.scores[i].name, text: text});
+        }
+      }
+    }
+      
+    this.sum = sum;
+    if(count!=0)
+    this.ava = sum/count;
+    else this.ava = 0;
+  }
+  
+  this.toString = function(){
+    return this.number+"\t"+this.name+"\t"+this.sum+"\t"+pRound(this.ava,0)+"\t"+this.rank;
+  }
+  
+  this.getTitles = function(){
+    var s = "";
+    for(var i in this.titles) s+=this.titles[i].name+"\t"+this.titles[i].text+"\n";
+    return s;
+  }
+}
+
+function getData(){
+  var table = document.getElementsByTagName("tbody")[1];
+  var trs = table.getElementsByTagName("tr");
+  for(var i in trs){
+    var tr = trs[i];
+    if(!(tr instanceof Node)) continue;
+    var tds = tr.getElementsByTagName("td");
+    var s = new student(tds[1].textContent, Number(tds[0].textContent));
+    for(var j = 2; j<tds.length;j++){
+      s.scores.push(getScoreByString(tds[j].getAttribute("title")));
+    }
+    s.calcScore();
+    students.push(s);
+  }
+}
+
+function calcRank(){
+  var rStudents = [];
+  for(var i in students){
+    rStudents.push({id:i, data:students[i]});
+  }
+  rStudents.sort(function(a,b){return -a.data.ava+b.data.ava});
+  for(var i in rStudents){
+    students[rStudents[i].id].rank = Number(i)+1;
+  }
+}
+
+function genStudentTable(students){
+  var data = [];
+  for(var i in students){
+    var s = students[i];
+    data.push([s.number, s.name, s.rank, s.sum, pRound(s.ava,2)]);
+  }
+  return genTable(["座號","姓名","名次","總分","平均"], data);
+}
+
+function dothework(){
+  getData();
+  calcRank();
+
+  var body = document.getElementsByTagName("body")[0];
+
+  body.innerHTML+=(
+    "<script src='https://code.jquery.com/jquery-1.12.0.min.js'></script>"+
+  "<script src='https://code.jquery.com/jquery-migrate-1.2.1.min.js'></script>"+
+  "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' >"+
+  "<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css'>"+
+  "<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>");
+
+  var contain = document.createElement("div");
+  contain.setAttribute("class","container");
+  var div = document.createElement("div");
+  div.setAttribute("class","col-md-12 panel-body");
+  var table = genStudentTable(students);
+  div.appendChild(table);
+
+  contain.appendChild(div);
+  body.appendChild(contain);
+}
