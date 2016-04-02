@@ -16,7 +16,7 @@
 ├──────────────────┤
   HANS  2016/04/02
 └──────────────────┘
-
+ 
 */
 
 function h(d,c){for(var a=0;a<c;a++)d*=10;d=Math.round(d)+"";var e="";for(a in d)e+=d[a],a==d.length-c-1&&(e+=".");return e}function k(d,c){var a=document.createElement("tr"),e;for(e in c){var b=document.createElement(d);b.textContent=c[e];a.appendChild(b)}return a}
