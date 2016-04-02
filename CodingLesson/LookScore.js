@@ -1,9 +1,9 @@
 /* 
 
 》臺北市立大安高工資訊科程式設計實習課程之作業展示成績統計工具
-
+》請複製並貼上以下程式碼於作業展示網頁之CONSOLE (於瀏覽器中使用 F12 開啟)
 ┌───────────────────────────────────────────────────────────────────────────────────┐
-│                      請複製以下短碼並貼上作業展示網頁之console中                        │
+│                                COPY THIS AND PASTE                                │
 ├───────────────────────────────────────────────────────────────────────────────────┤
  document.body.appendChild(n=document.createElement("script")),n.setAttribute("src",
  "https://rawgit.com/chiuhans111/Works/master/CodingLesson/LookScore.js");
