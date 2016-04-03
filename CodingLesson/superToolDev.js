@@ -80,6 +80,10 @@ sptool.setup = function(worksToDo){
     sptool.loaded(worksToDo);
   });
 }
+sptool.auto.all = function(){
+  sptool.setup([sptool.auto.jquery,sptool.auto.bootstrap]);
+}
+
 sptool.auto.jquery = function(){
   sptool.doc.import.js("https://code.jquery.com/jquery-1.12.0.min.js",
                        "jquery");
@@ -103,4 +107,3 @@ sptool.loaded = function(worksToDo){
   for(var i in sptool.afterLoaded) sptool.afterLoaded[i]();
   sptool.isLoaded = true;
 }
-
