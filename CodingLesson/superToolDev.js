@@ -1,3 +1,13 @@
+/*
+<head>
+  <meta charset="UTF-8">
+  <script src="https://rawgit.com/chiuhans111/Works/master/CodingLesson/superToolDev.js"></script>
+  <script>
+    sptool.auto.forClass("X-X");
+  </script>
+</head>
+*/
+
 var sptool = {};
 sptool.deBug = true;
 sptool.doc = {};
@@ -91,10 +101,10 @@ sptool.setup = function(worksToDo){
     sptool.loaded(worksToDo);
   });
 }
+
 sptool.auto.all = function(){
   sptool.setup([sptool.auto.jquery,sptool.auto.bootstrap]);
 }
-
 sptool.auto.forClass = function(Unit){
   sptool.regAfterLoaded(function(){
     sptool.doc.head.appendChild(sptool.doc.create("meta",{charset:"UTF-8"}));
@@ -104,7 +114,6 @@ sptool.auto.forClass = function(Unit){
   title.textContent = "乙班09邱柏翰"+Unit;
   sptool.doc.appendToHead(title);
 }
-
 sptool.auto.jquery = function(){
   sptool.doc.import.js("https://code.jquery.com/jquery-1.12.0.min.js",
                        "jquery");
@@ -128,9 +137,37 @@ sptool.loaded = function(worksToDo){
   sptool.doc.html = document.getElementsByTagName("html")[0];
   sptool.doc.head = document.getElementsByTagName("head")[0];
   sptool.doc.body = document.getElementsByTagName("body")[0];
+  sptool.doc.body.setAttribute("style","font-family: 微軟正黑體");
+  var container = document.getElementsByClassName("container");
+  var containerF = document.getElementsByClassName("container-fluid");
+  if(container.length<=0 && containerF.length<=0 ){
+    LOG.ERRO("未套用 bootstrap container","\n系統將自動將內文套用 container");
+    sptool.doc.setOnBootstrapMode();
+  }
   //this must be last line
   for(var i in worksToDo) worksToDo[i]();
   for(var i in sptool.afterLoaded) sptool.afterLoaded[i]();
   sptool.isLoaded = true;
   LOG.WARR("製作聲明 0304207","\nsuperTool is made by HANS")
+}
+
+sptool.doc.setOnBootstrapMode = function(){
+  var oldText = sptool.doc.body.innerHTML;
+  sptool.doc.body.innerHTML = "";
+  var newContain = sptool.doc.create("div",{class:"container"});
+  var row1 = sptool.doc.create("div",{class:"row"});
+  var row2 = sptool.doc.create("div",{class:"row"});
+  var col1 = sptool.doc.create("div",{class:"col-md-12"});
+  var col2 = sptool.doc.create("div",{class:"col-md-12"});
+  row1.appendChild(col1);
+  row2.appendChild(col2);
+  newContain.appendChild(row1);
+  newContain.appendChild(row2);
+  row1.innerHTML = oldText;
+  row2.innerHTML = "<hr>此為我學過bootstrap以及javascript後<br>寫了個小程式幫我自動套用bootstrap版型 by 0304207";
+  sptool.doc.body.appendChild(newContain);
+  
+  var table = newContain.getElementsByTagName("table");
+  for(var i in table) if(table[i] instanceof Node)
+    table[i].setAttribute("class","table table-hover");
 }
