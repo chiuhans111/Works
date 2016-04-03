@@ -132,4 +132,5 @@ sptool.loaded = function(worksToDo){
   for(var i in worksToDo) worksToDo[i]();
   for(var i in sptool.afterLoaded) sptool.afterLoaded[i]();
   sptool.isLoaded = true;
+  LOG.WARR("DONE 100%","此套件作者為乙班09邱柏翰")
 }
