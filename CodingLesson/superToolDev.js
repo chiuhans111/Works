@@ -13,6 +13,7 @@ sptool.deBug = true;
 sptool.doc = {};
 sptool.auto = {};
 sptool.isLoaded = false;
+sptool.helpTilEnd = false;
 {
   {
     var consoleLog = function(){};
@@ -113,6 +114,7 @@ sptool.auto.forClass = function(Unit){
   var title = sptool.doc.create("title")
   title.textContent = "乙班09邱柏翰"+Unit;
   sptool.doc.appendToHead(title);
+  sptool.helpTilEnd = true;
 }
 sptool.auto.jquery = function(){
   sptool.doc.import.js("https://code.jquery.com/jquery-1.12.0.min.js",
@@ -138,12 +140,15 @@ sptool.loaded = function(worksToDo){
   sptool.doc.head = document.getElementsByTagName("head")[0];
   sptool.doc.body = document.getElementsByTagName("body")[0];
   sptool.doc.body.setAttribute("style","font-family: 微軟正黑體");
-  var container = document.getElementsByClassName("container");
-  var containerF = document.getElementsByClassName("container-fluid");
-  if(container.length<=0 && containerF.length<=0 ){
-    LOG.ERRO("未套用 bootstrap container","\n系統將自動將內文套用 container");
-    sptool.doc.setOnBootstrapMode();
+  if(sptool.helpTilEnd){
+    var container = document.getElementsByClassName("container");
+    var containerF = document.getElementsByClassName("container-fluid");
+    if(container.length<=0 && containerF.length<=0 ){
+      LOG.ERRO("未套用 bootstrap container","\n系統將自動將內文套用版型");
+      sptool.doc.setOnBootstrapMode();
+    }
   }
+  
   //this must be last line
   for(var i in worksToDo) worksToDo[i]();
   for(var i in sptool.afterLoaded) sptool.afterLoaded[i]();
