@@ -84,7 +84,9 @@ sptool.auto.all = function(){
   sptool.setup([sptool.auto.jquery,sptool.auto.bootstrap]);
 }
 sptool.auto.forClass = function(title){
-  sptool.doc.appendToHead(sptool.doc.create("meta",{charset:"UTF-8"}));
+  sptool.regAfterLoaded(function(){
+    sptool.doc.appendToHead(sptool.doc.create("meta",{charset:"UTF-8"}));
+  });
   sptool.auto.all();
   var title = sptool.doc.create("title")
   title.textContent = "乙班09邱柏翰"+title;
