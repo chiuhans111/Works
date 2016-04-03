@@ -1,23 +1,26 @@
 var sptool = {};
+sptool.deBug = true;
 sptool.doc = {};
 sptool.auto = {};
 sptool.isLoaded = false;
 {
   {
-    var consoleLog = function(title, content, hlColor, foColor){
-      if(typeof content == "string"){
-        console.log("%c| "+title+" %c\n"+content,
-                  "color:"+hlColor+"; font-size:14px;",
-                  "color:"+foColor+";");
-      }
+    var consoleLog = function(){};
+    if(sptool.deBug)
+      consoleLog = function(title, content, hlColor, foColor){
+        if(typeof content == "string"){
+          console.log("%c| "+title+" %c "+content,
+                    "color:"+hlColor+";",
+                    "color:"+foColor+";");
+        }
 
-      else{
-        console.log("%c| "+title+" %c\n "+content+"：",
-                  "color:"+hlColor+"; font-size:14px;",
-                  "color:"+foColor+";");
-        console.log(content);
-      }
-    }// 發送客製化log訊息
+        else{
+          console.log("%c| "+title+" %c\n "+content+"：",
+                    "color:"+hlColor+";",
+                    "color:"+foColor+";");
+          console.log(content);
+        }
+      }// 發送客製化log訊息
     var colorLogFun = function(color1, color2){ 
     return function(title, content){
       consoleLog(title, content, color1, color2);
@@ -53,20 +56,28 @@ sptool.setup = function(worksToDo){
   sptool.doc.importStacker = {};
   var importFun = function(tagName, att, targetAtt){
     return function(link, Id, requireId){
-      if("undefined" == typeof id) id = link;
-      if("undefined" == typeof requireId) requireId = link;
+      
+      if("undefined" === typeof Id) Id = link;
+      if("undefined" === typeof requireId) requireId = link;
       att[targetAtt] = link;
       var importCode = sptool.doc.create(tagName,att);
       importCode.onload = function(){
         sptool.doc.importStacker[Id]=null
-        LOG.SUCC("匯入完成","預載已告一段落");
+        LOG.SUCC("匯入完成",Id);
       };
+      
       var me = function(){
-        LOG.INFO("正在匯入",link);
+        LOG.INFO("正在匯入",Id);
         sptool.doc.appendToHead(importCode);
       }
       if(sptool.doc.importStacker[requireId]==null) me();
-      else sptool.doc.importStacker[requireId].onload = me;
+      else {
+        var old = sptool.doc.importStacker[requireId].onload;
+          sptool.doc.importStacker[requireId].onload = function(){
+          old();
+          me();
+        }
+      }
       sptool.doc.importStacker[Id]=importCode;
     }
   }
@@ -83,9 +94,10 @@ sptool.setup = function(worksToDo){
 sptool.auto.all = function(){
   sptool.setup([sptool.auto.jquery,sptool.auto.bootstrap]);
 }
+
 sptool.auto.forClass = function(title){
   sptool.regAfterLoaded(function(){
-    sptool.doc.appendToHead(sptool.doc.create("meta",{charset:"UTF-8"}));
+    sptool.doc.head.appendChild(sptool.doc.create("meta",{charset:"UTF-8"}));
   });
   sptool.auto.all();
   var title = sptool.doc.create("title")
@@ -97,14 +109,16 @@ sptool.auto.jquery = function(){
   sptool.doc.import.js("https://code.jquery.com/jquery-1.12.0.min.js",
                        "jquery");
   sptool.doc.import.js("https://code.jquery.com/jquery-migrate-1.2.1.min.js",
-                       "jqueryMin","jquery");
+                       "jquery migrate","jquery");
 }
 sptool.auto.bootstrap = function(){
   sptool.doc.appendToHead(sptool.doc.create("meta",{
     name:"viewport", content:"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
   }));
-  sptool.doc.import.css("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css");
-  sptool.doc.import.css("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css");
+  sptool.doc.import.css("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css",
+                        "bootstrap CSS");
+  sptool.doc.import.css("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css",
+                        "bootstrap theme");
   sptool.doc.import.js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js",
                        "bootstrap","jquery");
 }
