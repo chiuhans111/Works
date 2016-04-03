@@ -170,7 +170,7 @@ sptool.doc.setOnBootstrapMode = function(){
   newContain.appendChild(row2);
   row1.innerHTML = oldText;
   row2.innerHTML = "<hr><br>"+
-    "為了拯救老師的眼睛，不需要再看到擠在左側的網頁"+
+    "為了拯救老師的眼睛，不需要再看到擠在左側的網頁<br>"+
     "所以在我學過bootstrap以及javascript之後<br>"+
     "寫了個小程式幫我自動套用bootstrap版型<br>by 0304207";
   sptool.doc.body.appendChild(newContain);
