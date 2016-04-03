@@ -107,6 +107,7 @@ sptool.auto.all = function(){
   sptool.setup([sptool.auto.jquery,sptool.auto.bootstrap]);
 }
 sptool.auto.forClass = function(Unit){
+  sptool.helpTilEnd = true;
   sptool.regAfterLoaded(function(){
     sptool.doc.head.appendChild(sptool.doc.create("meta",{charset:"UTF-8"}));
   });
@@ -114,7 +115,6 @@ sptool.auto.forClass = function(Unit){
   var title = sptool.doc.create("title")
   title.textContent = "乙班09邱柏翰"+Unit;
   sptool.doc.appendToHead(title);
-  sptool.helpTilEnd = true;
 }
 sptool.auto.jquery = function(){
   sptool.doc.import.js("https://code.jquery.com/jquery-1.12.0.min.js",
