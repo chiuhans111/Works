@@ -83,6 +83,12 @@ sptool.setup = function(worksToDo){
 sptool.auto.all = function(){
   sptool.setup([sptool.auto.jquery,sptool.auto.bootstrap]);
 }
+sptool.auto.forClass = function(title){
+  sptool.auto.all();
+  var title = sptool.doc.create("title")
+  title.textContent = "乙班09邱柏翰"+title;
+  sptool.doc.appendToHead(title);
+}
 
 sptool.auto.jquery = function(){
   sptool.doc.import.js("https://code.jquery.com/jquery-1.12.0.min.js",
@@ -91,6 +97,10 @@ sptool.auto.jquery = function(){
                        "jqueryMin","jquery");
 }
 sptool.auto.bootstrap = function(){  
+  sptool.doc.appendToHead(sptool.doc.create("meta",{charset:"UTF-8"}));
+  sptool.doc.appendToHead(sptool.doc.create("meta",{
+    name:"viewport", content:"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  }));
   sptool.doc.import.css("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css");
   sptool.doc.import.css("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css");
   sptool.doc.import.js("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js",
