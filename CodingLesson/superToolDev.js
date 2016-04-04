@@ -157,7 +157,7 @@ sptool.doc.setOnBootstrapMode = function() {
     newContain.appendChild(row1);
     newContain.appendChild(row2);
     row1.innerHTML = oldText;
-    row2.innerHTML = "<hr><br>super tool 自動套版 by Hans";
+    row2.innerHTML = "<hr><br>super tool 自動套版 made by cbs09";
     sptool.doc.body.appendChild(newContain);
 
     var table = newContain.getElementsByTagName("table");
