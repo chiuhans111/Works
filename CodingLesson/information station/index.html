@@ -1,18 +1,19 @@
 <html lang="en">
 
 <head>
+
     <head>
-      <meta charset="UTF-8">
-      <script src="https://rawgit.com/chiuhans111/Works/master/CodingLesson/superToolDev.js"></script>
-      <script>
-        sptool.auto.forClass("X-X");
-      </script>
+        <meta charset="UTF-8">
+        <!--<script src="https://rawgit.com/chiuhans111/Works/master/CodingLesson/superToolDev.js"></script>-->
+        <script src="../superToolDev.js"></script>
     </head>
     <title>測試</title>
     <script>
         sptool.helpTilEnd = true;
-        sptool.auto.all();
-        sptool.doc.import.js("js/unit/unit.js","unitJs","jquery");
+        sptool.auto.all(function() {
+            sptool.doc.import.js("js/jqCrossSite.js", "jqCrossSite", "jquery")
+            sptool.doc.import.js("js/unit/unit.js", "unitJs", "jqCrossSite");
+        });
     </script>
 </head>
 
@@ -26,13 +27,24 @@
         <div class="rol">
             <div class="col-md-3">
                 <div class="panel panel-default">
-                    <div class="panel-body"><h3>單元講義</h3></div>
-                    <div class="panel-heading"></div>
                     <div class="panel-body">
+                        <h3>單元講義</h3></div>
+                    <div class="panel-heading"></div>
+                    <div id="getUnitBookHere" class="panel-body">
                     </div>
                 </div>
             </div>
-
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>課程說明</h3> </div>
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <p>課程網站</p>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>

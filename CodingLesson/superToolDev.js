@@ -105,8 +105,10 @@ sptool.setup = function(worksToDo) {
     });
 }
 
-sptool.auto.all = function() {
-    sptool.setup([sptool.auto.jquery, sptool.auto.bootstrap]);
+sptool.auto.all = function(func) {
+    var work = [sptool.auto.jquery, sptool.auto.bootstrap];
+    if("function" == typeof func) work.push(func);
+    sptool.setup(work);
 }
 sptool.auto.forClass = function(Unit) {
     sptool.helpTilEnd = true;
