@@ -110,11 +110,6 @@ sptool.auto.all = function() {
 }
 sptool.auto.forClass = function(Unit) {
     sptool.helpTilEnd = true;
-    sptool.regAfterLoaded(function() {
-        var p = sptool.doc.create("p");
-        p.textContent = "自動套版 by cbs09";
-        sptool.doc.body.appendChild(p);
-    });
     sptool.auto.all();
     var title = sptool.doc.create("title")
     title.textContent = "乙班09邱柏翰" + Unit;
