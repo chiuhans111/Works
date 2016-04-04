@@ -314,5 +314,5 @@ sptool.loaded = function(worksToDo) {
     for (var i in worksToDo) worksToDo[i]();
     for (var i in sptool.afterLoaded) sptool.afterLoaded[i]();
     sptool.isLoaded = true;
-    LOG.WARR("製作聲明 0304207", "\nsuperTool is made by HANS")
+    LOG.WARR("製作聲明", "\n superTool is made by cbs09")
 }
