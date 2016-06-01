@@ -332,7 +332,7 @@ sptool.cover.setup = function(){
     sptool.doc.body.appendChild(sptool.cover.object);
 }
 sptool.cover.turnoff = function(){
-    sptool.cover.opacity -= 4;
+    sptool.cover.opacity -= 8;
     sptool.cover.object.style.backgroundColor = 
         "rgba(255,255,255,"+(sptool.cover.opacity/255)+")";
     return sptool.cover.opacity <= 0;
@@ -344,5 +344,5 @@ sptool.cover.hide = function(){
                 sptool.cover.object);
             clearInterval(sptool.cover.interval);
         }
-    },14);
+    },10);
 }
