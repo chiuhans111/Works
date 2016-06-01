@@ -302,7 +302,7 @@ sptool.loaded = function(worksToDo) {
     sptool.doc.html = document.getElementsByTagName("html")[0];
     sptool.doc.head = document.getElementsByTagName("head")[0];
     sptool.doc.body = document.getElementsByTagName("body")[0];
-    sptool.cover.setup();
+    
     var oldStyle = sptool.doc.body.getAttribute("style");
     sptool.doc.body.setAttribute("style", " font-family: 微軟正黑體; " + oldStyle);
     if (sptool.helpTilEnd) {
@@ -313,7 +313,7 @@ sptool.loaded = function(worksToDo) {
             sptool.doc.setOnBootstrapMode();
         }
     }
-
+    sptool.cover.setup();
     //this must be last line
     for (var i in worksToDo) worksToDo[i]();
     for (var i in sptool.afterLoaded) sptool.afterLoaded[i]();
