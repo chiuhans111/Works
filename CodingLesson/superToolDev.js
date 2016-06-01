@@ -69,7 +69,12 @@ sptool.setup = function(worksToDo) {
             var importCode = sptool.doc.create(tagName, att);
             importCode.onload = function() {
                 sptool.doc.importStacker[Id] = null
-                LOG.SUCC("匯入完成", Id);
+                
+                var count = 0;
+                for(var i in sptool.doc.importStacker) if(sptool.doc.importStacker[i]!=null) count++;
+                
+                LOG.SUCC("匯入完成 剩餘"+count, Id);
+                if(count==0) sptool.cover.hide();
             };
 
             var me = function() {
@@ -95,9 +100,7 @@ sptool.setup = function(worksToDo) {
             js: importFun("script", {}, "src")
         }
         //this must be last line
-
-
-
+    
     //sptool.loaded(worksToDo);
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -314,5 +317,32 @@ sptool.loaded = function(worksToDo) {
     for (var i in worksToDo) worksToDo[i]();
     for (var i in sptool.afterLoaded) sptool.afterLoaded[i]();
     sptool.isLoaded = true;
-    LOG.WARR("製作聲明", "\n superTool is made by cbs09")
+    LOG.WARR("製作聲明", "\n superTool is made by cbs09");
+    sptool.cover.setup();
+}
+
+sptool.cover = {};
+sptool.cover.setup = function(){
+    sptool.cover.object = sptool.doc.create("div",{
+        style : "width: 100%; height: 100%;"+
+        "position: absolute; top: 0px; left:0px;"+
+        "background-color: rgb(255,255,255); zIndex: 9999;"
+    });
+    sptool.cover.opacity = 255;
+    sptool.doc.body.appendChild(sptool.cover.object);
+}
+sptool.cover.turnoff = function(){
+    sptool.cover.opacity -= 4;
+    sptool.cover.object.style.backgroundColor = 
+        "rgba(255,255,255,"+(sptool.cover.opacity/255)+")";
+    return sptool.cover.opacity <= 0;
+}
+sptool.cover.hide = function(){
+    sptool.cover.interval = setInterval(function(){
+        if(sptool.cover.turnoff()) {
+            sptool.doc.body.removeChild(
+                sptool.cover.object);
+            clearInterval(sptool.cover.interval);
+        }
+    },14);
 }
