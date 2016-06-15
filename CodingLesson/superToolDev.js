@@ -325,20 +325,23 @@ sptool.loaded = function(worksToDo) {
 
 sptool.cover = {};
 sptool.cover.setup = function(){
-    sptool.spinner();
+    
     sptool.cover.object = sptool.doc.create("div",{
         id: "sptoolCoverObject",
         style : "width: 100%; height: 100%;"+
         "position: absolute; top: 0px; left:0px;"+
         "background-color: rgb(255,255,255); zIndex: 9999;"
     });
+    document.getElementsByTagName("body")[0].appendChild(sptool.cover.object);
+    
+    sptool.spinner();
     var spin = sptool.doc.create("div",{class:"spinner"});
     spin.appendChild(sptool.doc.create("div",{class:"cube1"}));
     spin.appendChild(sptool.doc.create("div",{class:"cube2"}));
     sptool.cover.object.appendChild(spin);
     
     sptool.cover.opacity = 255;
-    document.getElementsByTagName("body")[0].appendChild(sptool.cover.object);
+    
 }
 sptool.cover.turnoff = function(){
     if(sptool.cover.object==null) return true;
