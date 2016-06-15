@@ -332,6 +332,7 @@ sptool.cover.setup = function(){
         "position: absolute; top: 0px; left:0px;"+
         "background-color: rgb(255,255,255); zIndex: 9999;"
     });
+    
     document.getElementsByTagName("body")[0].appendChild(sptool.cover.object);
     
     sptool.spinner();
@@ -348,9 +349,6 @@ sptool.cover.turnoff = function(){
     
     sptool.cover.opacity -= 8;
     sptool.cover.object.style.opacity = (sptool.cover.opacity/255);
-    /*
-    sptool.cover.object.style.backgroundColor = 
-        "rgba(255,255,255,"+(sptool.cover.opacity/255)+")";*/
     return sptool.cover.opacity <= 0;
 }
 sptool.cover.hide = function(){
