@@ -325,12 +325,18 @@ sptool.loaded = function(worksToDo) {
 
 sptool.cover = {};
 sptool.cover.setup = function(){
+    sptool.spinner();
     sptool.cover.object = sptool.doc.create("div",{
         id: "sptoolCoverObject",
         style : "width: 100%; height: 100%;"+
         "position: absolute; top: 0px; left:0px;"+
         "background-color: rgb(255,255,255); zIndex: 9999;"
     });
+    var spin = sptool.doc.create("div",{class:"spinner"});
+    spin.appendChild(sptool.doc.create("div",{class:"cube1"}));
+    spin.appendChild(sptool.doc.create("div",{class:"cube2"}));
+    sptool.cover.object.appendChild(spin);
+    
     sptool.cover.opacity = 255;
     document.getElementsByTagName("body")[0].appendChild(sptool.cover.object);
 }
@@ -338,8 +344,10 @@ sptool.cover.turnoff = function(){
     if(sptool.cover.object==null) return true;
     
     sptool.cover.opacity -= 8;
+    sptool.cover.object.style.opacity = (sptool.cover.opacity/255);
+    /*
     sptool.cover.object.style.backgroundColor = 
-        "rgba(255,255,255,"+(sptool.cover.opacity/255)+")";
+        "rgba(255,255,255,"+(sptool.cover.opacity/255)+")";*/
     return sptool.cover.opacity <= 0;
 }
 sptool.cover.hide = function(){
@@ -347,15 +355,13 @@ sptool.cover.hide = function(){
     sptool.cover.interval = setInterval(function(){
         if(sptool.cover.turnoff()) {
             clearInterval(sptool.cover.interval);
-            sptool.doc.body.removeChild(
-                sptool.cover.object);
+                sptool.cover.object.remove();
         }
     },10);
 }
 
-sptool.spinner(){
+sptool.spinner = function(){
     var css = document.createElement("style");
-    css.innerHTML = ".spinner{margin:100px auto;width:40px;height:40px;position:relative;text-align:center;-webkit-animation:sk-rotate 2s infinite linear;animation:sk-rotate 2s infinite linear}.dot1,.dot2{width:60%;height:60%;display:inline-block;position:absolute;top:0;background-color:#333;border-radius:100%;-webkit-animation:sk-bounce 2s infinite ease-in-out;animation:sk-bounce 2s infinite ease-in-out}.dot2{top:auto;bottom:0;-webkit-animation-delay:-1s;animation-delay:-1s}@-webkit-keyframes sk-rotate{100%{-webkit-transform:rotate(360deg)}}@keyframes sk-rotate{100%{transform:rotate(360deg);-webkit-transform:rotate(360deg)}}@-webkit-keyframes sk-bounce{0%,100%{-webkit-transform:scale(0.0)}50%{-webkit-transform:scale(1.0)}}@keyframes sk-bounce{0%,100%{transform:scale(0.0);-webkit-transform:scale(0.0)}50%{transform:scale(1.0);-webkit-transform:scale(1.0)}}";
-    
+    css.innerHTML = ".spinner{margin:100px auto;width:40px;height:40px;position:relative}.cube1,.cube2{background-color:#333;width:15px;height:15px;position:absolute;top:0;left:0;-webkit-animation:sk-cubemove 1.8s infinite ease-in-out;animation:sk-cubemove 1.8s infinite ease-in-out}.cube2{-webkit-animation-delay:-.9s;animation-delay:-.9s}@-webkit-keyframes sk-cubemove{25%{-webkit-transform:translateX(42px) rotate(-90deg) scale(0.5)}50%{-webkit-transform:translateX(42px) translateY(42px) rotate(-180deg)}75%{-webkit-transform:translateX(0px) translateY(42px) rotate(-270deg) scale(0.5)}100%{-webkit-transform:rotate(-360deg)}}@keyframes sk-cubemove{25%{transform:translateX(42px) rotate(-90deg) scale(0.5);-webkit-transform:translateX(42px) rotate(-90deg) scale(0.5)}50%{transform:translateX(42px) translateY(42px) rotate(-179deg);-webkit-transform:translateX(42px) translateY(42px) rotate(-179deg)}50.1%{transform:translateX(42px) translateY(42px) rotate(-180deg);-webkit-transform:translateX(42px) translateY(42px) rotate(-180deg)}75%{transform:translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);-webkit-transform:translateX(0px) translateY(42px) rotate(-270deg) scale(0.5)}100%{transform:rotate(-360deg);-webkit-transform:rotate(-360deg)}}";
     document.getElementsByTagName("head")[0].appendChild(css);
 }
